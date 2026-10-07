@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 680" role="img" aria-labelledby="title desc">
+  <title id="title">Laboratoire d'analyses médicales</title>
+  <desc id="desc">Illustration d'un laboratoire avec microscope, tubes et flacons.</desc>
+  <defs>
+    <linearGradient id="wall" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#123b5d"/><stop offset="1" stop-color="#176b87"/></linearGradient>
+    <linearGradient id="desk" x1="0" x2="1"><stop offset="0" stop-color="#d1fae5"/><stop offset="1" stop-color="#86efac"/></linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#052e1b" flood-opacity=".2"/></filter>
+  </defs>
+  <rect width="760" height="680" rx="36" fill="url(#wall)"/>
+  <circle cx="630" cy="104" r="72" fill="#67e8f9" opacity=".28"/><circle cx="116" cy="560" r="110" fill="#bae6fd" opacity=".15"/>
+  <path d="M0 510h760v170H0z" fill="url(#desk)"/><path d="M80 510h600" stroke="#155e75" stroke-width="10" stroke-linecap="round" opacity=".35"/>
+  <g filter="url(#shadow)"><path d="M238 436c0-74 47-118 108-118s108 44 108 118v46H238z" fill="#f8fafc"/><path d="M294 318h104v52H294z" fill="#e2e8f0"/><path d="M326 252h42v70h-42z" fill="#f8fafc"/><path d="M344 238c-31 0-56 25-56 56v12h88v-12c0-31-25-56-56-56z" fill="#334155"/><path d="M284 390h160" stroke="#123b5d" stroke-width="13" stroke-linecap="round"/><path d="M268 482h192" stroke="#123b5d" stroke-width="16" stroke-linecap="round"/><path d="M344 382h26v84h-26z" fill="#0891b2"/><path d="M302 450h110l-16 32H318z" fill="#0891b2"/><path d="M416 290l62-52 19 22-62 52z" fill="#475569"/><path d="M464 238l23-20 31 35-23 20z" fill="#1e293b"/></g>
+  <g filter="url(#shadow)"><path d="M552 406h76l12 104h-100z" fill="#bfdbfe" opacity=".92"/><path d="M566 386h48v32h-48z" fill="#e0f2fe"/><path d="M575 374h30v20h-30z" fill="#f8fafc"/><path d="M569 451h42" stroke="#3b82f6" stroke-width="9" stroke-linecap="round" opacity=".75"/><path d="M559 478h62" stroke="#3b82f6" stroke-width="9" stroke-linecap="round" opacity=".75"/></g>
+  <g filter="url(#shadow)"><path d="M128 420h58l8 90h-74z" fill="#fef3c7"/><path d="M138 399h38v26h-38z" fill="#fff7ed"/><path d="M144 386h26v18h-26z" fill="#f8fafc"/><path d="M130 458h54" stroke="#f59e0b" stroke-width="8" stroke-linecap="round" opacity=".7"/></g>
+  <g fill="#d1fae5" font-family="sans-serif"><text x="72" y="110" font-size="26" font-weight="700" letter-spacing="4">LABORATOIRE</text><text x="72" y="146" font-size="18" opacity=".8">Des résultats fiables, au bon moment.</text></g>
+</svg>

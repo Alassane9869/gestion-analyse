@@ -1,0 +1,3 @@
+@extends('layout.app')
+@section('title', 'Détail du médecin')
+@section('content')<div class="mx-auto max-w-3xl"><div class="mb-6 flex items-center justify-between"><h1 class="text-3xl font-bold">Dr {{ $medecin->prenom }} {{ $medecin->nom }}</h1><a class="btn-secondary rounded-xl px-4 py-2" href="{{ route('medecins.edit', $medecin) }}">Modifier</a></div><div class="panel rounded-2xl bg-white p-6 space-y-3"><p><strong>Spécialité :</strong> {{ $medecin->specialite ?: '—' }}</p><p><strong>Email :</strong> {{ $medecin->email ?: '—' }}</p><p><strong>Téléphone :</strong> {{ $medecin->telephone ?: '—' }}</p><p><strong>Adresse :</strong> {{ $medecin->adresse ?: '—' }}</p></div></div>@endsection
