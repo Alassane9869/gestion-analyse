@@ -66,36 +66,71 @@ class UserController extends Controller
             'groupe_sanguin' => ['nullable', 'string', 'max:10'],
         ]);
 
-        $user = User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
-            'role' => $validated['role'],
-        ]);
+        $user = \Illuminate\Support\Facades\DB::transaction(function () use ($validated) {
+            $user = User::create([
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'password' => Hash::make($validated['password']),
+                'role' => $validated['role'],
+            ]);
 
-        // Synchronisation automatique selon le rôle choisi
-        if ($validated['role'] === 'medecin') {
-            $parts = explode(' ', $validated['name'], 2);
-            Medecin::create([
-                'user_id' => $user->id,
-                'prenom' => $parts[0] ?? $validated['name'],
-                'nom' => $parts[1] ?? 'Médecin',
-                'email' => $validated['email'],
-                'telephone' => $validated['telephone'] ?? null,
-                'specialite' => $validated['specialite'] ?? 'Biologie médicale',
-            ]);
-        } elseif ($validated['role'] === 'patient') {
-            $parts = explode(' ', $validated['name'], 2);
-            Patient::create([
-                'user_id' => $user->id,
-                'prenom' => $parts[0] ?? $validated['name'],
-                'nom' => $parts[1] ?? 'Patient',
-                'email' => $validated['email'],
-                'telephone' => $validated['telephone'] ?? null,
-                'whatsapp_phone' => $validated['telephone'] ?? null,
-                'groupe_sanguin' => $validated['groupe_sanguin'] ?? null,
-            ]);
-        }
+            // Synchronisation automatique selon le rôle choisi
+            if ($validated['role'] === 'medecin') {
+                $parts = explode(' ', $validated['name'], 2);
+                $medecin = Medecin::where('email', $validated['email'])
+                    ->orWhere('user_id', $user->id)
+                    ->first();
+
+                if ($medecin) {
+                    $medecin->update([
+                        'user_id' => $user->id,
+                        'prenom' => $parts[0] ?? $validated['name'],
+                        'nom' => $parts[1] ?? ($medecin->nom ?: 'Médecin'),
+                        'email' => $validated['email'],
+                        'telephone' => $validated['telephone'] ?? $medecin->telephone,
+                        'specialite' => $validated['specialite'] ?? ($medecin->specialite ?: 'Biologie médicale'),
+                    ]);
+                } else {
+                    Medecin::create([
+                        'user_id' => $user->id,
+                        'prenom' => $parts[0] ?? $validated['name'],
+                        'nom' => $parts[1] ?? 'Médecin',
+                        'email' => $validated['email'],
+                        'telephone' => $validated['telephone'] ?? null,
+                        'specialite' => $validated['specialite'] ?? 'Biologie médicale',
+                    ]);
+                }
+            } elseif ($validated['role'] === 'patient') {
+                $parts = explode(' ', $validated['name'], 2);
+                $patient = Patient::where('email', $validated['email'])
+                    ->orWhere('user_id', $user->id)
+                    ->first();
+
+                if ($patient) {
+                    $patient->update([
+                        'user_id' => $user->id,
+                        'prenom' => $parts[0] ?? $validated['name'],
+                        'nom' => $parts[1] ?? ($patient->nom ?: 'Patient'),
+                        'email' => $validated['email'],
+                        'telephone' => $validated['telephone'] ?? $patient->telephone,
+                        'whatsapp_phone' => $validated['telephone'] ?? $patient->whatsapp_phone,
+                        'groupe_sanguin' => $validated['groupe_sanguin'] ?? $patient->groupe_sanguin,
+                    ]);
+                } else {
+                    Patient::create([
+                        'user_id' => $user->id,
+                        'prenom' => $parts[0] ?? $validated['name'],
+                        'nom' => $parts[1] ?? 'Patient',
+                        'email' => $validated['email'],
+                        'telephone' => $validated['telephone'] ?? null,
+                        'whatsapp_phone' => $validated['telephone'] ?? null,
+                        'groupe_sanguin' => $validated['groupe_sanguin'] ?? null,
+                    ]);
+                }
+            }
+
+            return $user;
+        });
 
         return redirect()->route('admin.users.index')->with('success', "L'utilisateur {$user->name} a été créé avec succès.");
     }
@@ -137,13 +172,15 @@ class UserController extends Controller
         // Mettre à jour ou créer la fiche associée
         if ($validated['role'] === 'medecin') {
             $parts = explode(' ', $validated['name'], 2);
-            if ($user->medecin) {
-                $user->medecin->update([
+            $medecin = $user->medecin ?: Medecin::where('email', $validated['email'])->first();
+            if ($medecin) {
+                $medecin->update([
+                    'user_id' => $user->id,
                     'prenom' => $parts[0] ?? $validated['name'],
-                    'nom' => $parts[1] ?? ($user->medecin->nom ?: 'Médecin'),
+                    'nom' => $parts[1] ?? ($medecin->nom ?: 'Médecin'),
                     'email' => $validated['email'],
-                    'telephone' => $validated['telephone'] ?? $user->medecin->telephone,
-                    'specialite' => $validated['specialite'] ?? $user->medecin->specialite,
+                    'telephone' => $validated['telephone'] ?? $medecin->telephone,
+                    'specialite' => $validated['specialite'] ?? ($medecin->specialite ?: 'Biologie médicale'),
                 ]);
             } else {
                 Medecin::create([
@@ -157,14 +194,16 @@ class UserController extends Controller
             }
         } elseif ($validated['role'] === 'patient') {
             $parts = explode(' ', $validated['name'], 2);
-            if ($user->patient) {
-                $user->patient->update([
+            $patient = $user->patient ?: Patient::where('email', $validated['email'])->first();
+            if ($patient) {
+                $patient->update([
+                    'user_id' => $user->id,
                     'prenom' => $parts[0] ?? $validated['name'],
-                    'nom' => $parts[1] ?? ($user->patient->nom ?: 'Patient'),
+                    'nom' => $parts[1] ?? ($patient->nom ?: 'Patient'),
                     'email' => $validated['email'],
-                    'telephone' => $validated['telephone'] ?? $user->patient->telephone,
-                    'whatsapp_phone' => $validated['telephone'] ?? $user->patient->whatsapp_phone,
-                    'groupe_sanguin' => $validated['groupe_sanguin'] ?? $user->patient->groupe_sanguin,
+                    'telephone' => $validated['telephone'] ?? $patient->telephone,
+                    'whatsapp_phone' => $validated['telephone'] ?? $patient->whatsapp_phone,
+                    'groupe_sanguin' => $validated['groupe_sanguin'] ?? $patient->groupe_sanguin,
                 ]);
             } else {
                 Patient::create([
@@ -190,7 +229,29 @@ class UserController extends Controller
         }
 
         $nom = $user->name;
-        $user->delete();
+
+        \Illuminate\Support\Facades\DB::transaction(function () use ($user) {
+            $patient = $user->patient ?: Patient::where('email', $user->email)->first();
+            if ($patient) {
+                $hasMedicalRecords = $patient->resultats()->exists() 
+                    || $patient->commandes()->exists() 
+                    || $patient->rendezVous()->exists();
+
+                if (!$hasMedicalRecords) {
+                    $patient->delete();
+                } else {
+                    // Conserver les archives médicales légales mais dissocier le compte d'authentification
+                    $patient->update(['user_id' => null]);
+                }
+            }
+
+            $medecin = $user->medecin ?: Medecin::where('email', $user->email)->first();
+            if ($medecin) {
+                $medecin->update(['user_id' => null]);
+            }
+
+            $user->delete();
+        });
 
         return redirect()->route('admin.users.index')->with('success', "L'utilisateur {$nom} a été supprimé du système.");
     }

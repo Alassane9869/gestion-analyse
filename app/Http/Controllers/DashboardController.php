@@ -20,7 +20,23 @@ class DashboardController extends Controller
         }
 
         if ($user->isPatient()) {
-            $patient = $user->patient()->with(['commandes.types', 'rendezVous.medecin', 'resultats.typeAnalyse'])->first();
+            $patient = $user->patient;
+            if (! $patient) {
+                $patient = \App\Models\Patient::where('email', $user->email)->first();
+                if ($patient) {
+                    $patient->update(['user_id' => $user->id]);
+                } else {
+                    $parts = explode(' ', $user->name, 2);
+                    $patient = \App\Models\Patient::create([
+                        'user_id' => $user->id,
+                        'prenom' => $parts[0] ?? $user->name,
+                        'nom' => $parts[1] ?? 'Patient',
+                        'email' => $user->email,
+                    ]);
+                }
+            }
+
+            $patient->load(['commandes.types', 'rendezVous.medecin', 'resultats.typeAnalyse']);
 
             return view('dashboard.patient', compact('patient'));
         }

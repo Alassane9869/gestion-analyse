@@ -22,7 +22,7 @@ chmod -R 775 /home/vuxe8870/bio-sante.danayaplus.com/storage
 chmod -R 775 /home/vuxe8870/bio-sante.danayaplus.com/bootstrap/cache
 
 # 5. Migration et caches Laravel
-php /home/vuxe8870/bio-sante.danayaplus.com/artisan migrate --force 2>/dev/null || true
+php /home/vuxe8870/bio-sante.danayaplus.com/artisan migrate --force || true
 php /home/vuxe8870/bio-sante.danayaplus.com/artisan optimize:clear
 
 echo "✅ Déploiement terminé ! Le site est 100% opérationnel."

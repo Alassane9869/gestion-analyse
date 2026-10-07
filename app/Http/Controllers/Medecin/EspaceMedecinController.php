@@ -98,7 +98,8 @@ class EspaceMedecinController extends Controller
                 'role' => 'patient',
             ]);
 
-            Patient::create([
+            $patient = Patient::where('email', $data['email'])->first();
+            $patientData = [
                 'nom' => $data['nom'],
                 'prenom' => $data['prenom'],
                 'email' => $data['email'],
@@ -109,7 +110,13 @@ class EspaceMedecinController extends Controller
                 'sexe' => $data['sexe'] ?? null,
                 'adresse' => $data['adresse'] ?? null,
                 'user_id' => $user->id,
-            ]);
+            ];
+
+            if ($patient) {
+                $patient->update($patientData);
+            } else {
+                Patient::create($patientData);
+            }
         });
 
         return redirect()->route('medecin.espace.patients')->with('success', 'Patient ajouté avec succès.');

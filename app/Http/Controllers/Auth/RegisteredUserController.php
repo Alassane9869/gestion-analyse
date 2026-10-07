@@ -39,35 +39,76 @@ class RegisteredUserController extends Controller
         ]);
 
         $otp = str_pad((string) random_int(100000, 999999), 6, '0', STR_PAD_LEFT);
+        $hasOtpColumns = \Illuminate\Support\Facades\Schema::hasColumns('users', ['otp_code', 'otp_expires_at']);
 
-        $user = User::create([
+        $userAttributes = [
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => 'patient',
-            'otp_code' => $otp,
-            'otp_expires_at' => now()->addMinutes(15),
-            'email_verified_at' => null,
-        ]);
+        ];
 
-        $parts = explode(' ', $request->name, 2);
-        Patient::create([
-            'user_id' => $user->id,
-            'prenom' => $parts[0] ?? $request->name,
-            'nom' => $parts[1] ?? 'Patient',
-            'email' => $request->email,
-        ]);
+        if ($hasOtpColumns) {
+            $userAttributes['otp_code'] = $otp;
+            $userAttributes['otp_expires_at'] = now()->addMinutes(15);
+            $userAttributes['email_verified_at'] = null;
+        } else {
+            $userAttributes['email_verified_at'] = now();
+        }
 
-        try {
-            $user->notify(new OtpVerificationNotification($otp));
-        } catch (\Throwable $e) {
-            report($e);
+        $user = \Illuminate\Support\Facades\DB::transaction(function () use ($userAttributes, $request) {
+            $newUser = User::create($userAttributes);
+
+            $parts = explode(' ', $request->name, 2);
+            $prenom = $parts[0] ?? $request->name;
+            $nom = $parts[1] ?? 'Patient';
+            $cleanEmail = strtolower(trim($request->email));
+
+            // Détacher tout éventuel enregistrement patient pointant sur ce user_id
+            Patient::where('user_id', $newUser->id)->update(['user_id' => null]);
+
+            // Sécurité anti-conflit : vérifier si un dossier patient existe déjà avec cet email
+            // (ex: compte utilisateur précédemment supprimé mais dossier clinique archivé, ou patient pré-enregistré)
+            $existingPatient = Patient::where('email', $cleanEmail)
+                ->orWhere('email', $request->email)
+                ->first();
+
+            if ($existingPatient) {
+                $existingPatient->update([
+                    'user_id' => $newUser->id,
+                    'prenom' => $existingPatient->prenom ?: $prenom,
+                    'nom' => $existingPatient->nom ?: $nom,
+                    'email' => $cleanEmail,
+                ]);
+            } else {
+                Patient::create([
+                    'user_id' => $newUser->id,
+                    'prenom' => $prenom,
+                    'nom' => $nom,
+                    'email' => $cleanEmail,
+                ]);
+            }
+
+            return $newUser;
+        });
+
+        // Envoi sécurisé de la notification OTP (ne crashe jamais l'inscription si problème SMTP temporaire)
+        if ($hasOtpColumns) {
+            try {
+                $user->notify(new OtpVerificationNotification($otp));
+            } catch (\Throwable $e) {
+                report($e);
+            }
         }
 
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect()->route('otp.verify');
+        if ($hasOtpColumns && $user->hasPendingOtp()) {
+            return redirect()->route('otp.verify');
+        }
+
+        return redirect()->route('dashboard');
     }
 }

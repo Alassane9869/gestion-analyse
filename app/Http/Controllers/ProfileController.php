@@ -26,13 +26,44 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user = $request->user();
+        $user->fill($request->validated());
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
         }
 
-        $request->user()->save();
+        $user->save();
+
+        if ($user->patient) {
+            $parts = explode(' ', $user->name, 2);
+            $emailCollision = \App\Models\Patient::where('email', $user->email)
+                ->where('id', '!=', $user->patient->id)
+                ->exists();
+
+            $updateData = [
+                'prenom' => $parts[0] ?? $user->name,
+                'nom' => $parts[1] ?? ($user->patient->nom ?: 'Patient'),
+            ];
+            if (!$emailCollision) {
+                $updateData['email'] = $user->email;
+            }
+            $user->patient->update($updateData);
+        } elseif ($user->medecin) {
+            $parts = explode(' ', $user->name, 2);
+            $emailCollision = \App\Models\Medecin::where('email', $user->email)
+                ->where('id', '!=', $user->medecin->id)
+                ->exists();
+
+            $updateData = [
+                'prenom' => $parts[0] ?? $user->name,
+                'nom' => $parts[1] ?? ($user->medecin->nom ?: 'Médecin'),
+            ];
+            if (!$emailCollision) {
+                $updateData['email'] = $user->email;
+            }
+            $user->medecin->update($updateData);
+        }
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
@@ -50,7 +81,28 @@ class ProfileController extends Controller
 
         Auth::logout();
 
-        $user->delete();
+        \Illuminate\Support\Facades\DB::transaction(function () use ($user) {
+            $patient = $user->patient ?: \App\Models\Patient::where('email', $user->email)->first();
+            if ($patient) {
+                $hasMedicalRecords = $patient->resultats()->exists() 
+                    || $patient->commandes()->exists() 
+                    || $patient->rendezVous()->exists();
+
+                if (!$hasMedicalRecords) {
+                    $patient->delete();
+                } else {
+                    // Conserver les archives médicales légales mais dissocier le compte d'authentification
+                    $patient->update(['user_id' => null]);
+                }
+            }
+
+            $medecin = $user->medecin ?: \App\Models\Medecin::where('email', $user->email)->first();
+            if ($medecin) {
+                $medecin->update(['user_id' => null]);
+            }
+
+            $user->delete();
+        });
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();

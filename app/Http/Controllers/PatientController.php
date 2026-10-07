@@ -96,6 +96,14 @@ class PatientController extends Controller
 
     public function destroy(Patient $patient): RedirectResponse
     {
+        $hasMedicalRecords = $patient->resultats()->exists() 
+            || $patient->commandes()->exists() 
+            || $patient->rendezVous()->exists();
+
+        if ($hasMedicalRecords) {
+            return back()->withErrors(['patient' => 'Impossible de supprimer ce patient : des résultats médicaux, commandes ou rendez-vous y sont rattachés.']);
+        }
+
         $patient->delete();
 
         return redirect()->route('patients.index')->with('success', 'Patient supprimé avec succès.');

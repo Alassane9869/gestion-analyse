@@ -32,6 +32,10 @@ class AuthenticatedSessionController extends Controller
             return redirect()->route('medecin.espace.dashboard');
         }
 
+        if ($request->user()->hasPendingOtp()) {
+            return redirect()->route('otp.verify');
+        }
+
         return redirect()->intended(route('dashboard', absolute: false));
     }
 

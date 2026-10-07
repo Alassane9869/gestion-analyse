@@ -124,10 +124,23 @@ class PatientPortalController extends Controller
 
     private function patient(): Patient
     {
-        return request()->user()->patient()->firstOrCreate([], [
-            'nom' => request()->user()->name,
-            'prenom' => '',
-            'email' => request()->user()->email,
+        $user = request()->user();
+        if ($user->patient) {
+            return $user->patient;
+        }
+
+        $existing = Patient::where('email', $user->email)->first();
+        if ($existing) {
+            $existing->update(['user_id' => $user->id]);
+            return $existing;
+        }
+
+        $parts = explode(' ', $user->name, 2);
+        return Patient::create([
+            'user_id' => $user->id,
+            'nom' => $parts[1] ?? 'Patient',
+            'prenom' => $parts[0] ?? $user->name,
+            'email' => $user->email,
         ]);
     }
 }
