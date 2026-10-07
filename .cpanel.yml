@@ -1,5 +1,15 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/vuxe8870/bio-sante.danayaplus.com
-    - /bin/rsync -av --exclude='.git' --exclude='.env' ./ $DEPLOYPATH/
+    - /bin/rsync -a --chmod=D755,F644 --exclude='.git' --exclude='node_modules' --exclude='.env' /home/vuxe8870/repositories/gestion-analyse/ /home/vuxe8870/bio-sante.danayaplus.com/
+    - chmod 755 /home/vuxe8870/bio-sante.danayaplus.com/ /home/vuxe8870/bio-sante.danayaplus.com/public/
+    - find /home/vuxe8870/bio-sante.danayaplus.com/ -name ".htaccess" -exec chmod 644 {} +
+    - chmod -R 777 /home/vuxe8870/bio-sante.danayaplus.com/storage
+    - chmod -R 777 /home/vuxe8870/bio-sante.danayaplus.com/bootstrap/cache
+    - cp -f /home/vuxe8870/bio-sante.danayaplus.com/.env.production /home/vuxe8870/bio-sante.danayaplus.com/.env || true
+    - /opt/cpanel/composer/bin/composer --working-dir=/home/vuxe8870/bio-sante.danayaplus.com/ install --no-dev --optimize-autoloader || composer --working-dir=/home/vuxe8870/bio-sante.danayaplus.com/ install --no-dev --optimize-autoloader || true
+    - /usr/local/bin/php /home/vuxe8870/bio-sante.danayaplus.com/artisan key:generate --force || true
+    - /usr/local/bin/php /home/vuxe8870/bio-sante.danayaplus.com/artisan migrate --force --seed
+    - /usr/local/bin/php /home/vuxe8870/bio-sante.danayaplus.com/artisan storage:link || true
+    - /usr/local/bin/php /home/vuxe8870/bio-sante.danayaplus.com/artisan optimize:clear
+    - /usr/local/bin/php /home/vuxe8870/bio-sante.danayaplus.com/artisan optimize
