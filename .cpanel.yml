@@ -1,0 +1,5 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/vuxe8870/bio-sante.danayaplus.com
+    - /bin/rsync -av --exclude='.git' --exclude='.env' ./ $DEPLOYPATH/
