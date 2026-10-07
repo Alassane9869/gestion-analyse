@@ -49,9 +49,23 @@ class ResultatValideNotification extends Notification implements ShouldQueue
             $mail->line('**Remarques du médecin :** ' . $this->resultat->remarques);
         }
 
+        // Pièce jointe automatique du bulletin officiel PDF certifié
+        try {
+            $pdfService = app(\App\Services\PdfBulletinService::class);
+            $pdf = $pdfService->genererPdf($this->resultat);
+            $pdfOutput = $pdf->output();
+            $nomFichier = 'Bulletin_BioSante_' . sprintf('BIO-%s-%06d', date('Y'), $this->resultat->id) . '.pdf';
+            $mail->attachData($pdfOutput, $nomFichier, [
+                'mime' => 'application/pdf',
+            ]);
+            $mail->line('📎 **Votre bulletin d’analyse officiel certifié est joint à cet e-mail au format PDF.**');
+        } catch (\Throwable $e) {
+            report($e);
+        }
+
         return $mail
-            ->action('Consulter mon bulletin médical', $bulletinUrl)
-            ->line('Vous pouvez télécharger et imprimer votre bulletin d’analyse officiel directement depuis votre espace personnel.')
+            ->action('Consulter mon bulletin en ligne', $bulletinUrl)
+            ->line('Vous pouvez également consulter et télécharger vos bilans à tout moment depuis votre espace patient sécurisé.')
             ->salutation("Cordialement,\nL'équipe médicale BioSanté Analyses");
     }
 

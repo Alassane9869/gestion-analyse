@@ -48,6 +48,11 @@ class User extends Authenticatable
         return !empty($this->otp_code);
     }
 
+    public function sendPasswordResetNotification($token): void
+    {
+        $this->notify(new \App\Notifications\ResetPasswordNotification($token));
+    }
+
     /**
      * Get the attributes that should be cast.
      *

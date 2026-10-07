@@ -62,6 +62,12 @@ class OtpVerificationController extends Controller
             'email_verified_at' => now(),
         ]);
 
+        try {
+            $user->notify(new \App\Notifications\CompteActiveBienvenueNotification());
+        } catch (\Throwable $e) {
+            report($e);
+        }
+
         return redirect()->route('dashboard')->with('status', 'Votre compte a été vérifié et activé avec succès ! Bienvenue sur BioSanté.');
     }
 

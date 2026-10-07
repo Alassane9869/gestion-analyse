@@ -104,9 +104,22 @@ class PatientPortalController extends Controller
 
         $data['patient_id'] = $this->patient()->id;
         $data['statut'] = 'en_attente';
-        RendezVous::create($data);
+        $rdv = RendezVous::create($data);
 
-        return back()->with('success', 'Rendez-vous demandé avec succès.');
+        // Notifications automatiques
+        try {
+            // Confirmation immédiate envoyée au patient
+            $request->user()->notify(new \App\Notifications\RendezVousDemandePatientNotification($rdv));
+
+            // Alerte au médecin concerné
+            if ($rdv->medecin?->user) {
+                $rdv->medecin->user->notify(new \App\Notifications\NouveauRendezVousMedecinNotification($rdv));
+            }
+        } catch (\Throwable $e) {
+            report($e);
+        }
+
+        return back()->with('success', 'Rendez-vous demandé avec succès. Un e-mail de confirmation vous a été envoyé.');
     }
 
     private function patient(): Patient
