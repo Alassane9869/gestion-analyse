@@ -32,12 +32,18 @@ class Patient extends Model
         'whatsapp_opt_in',
         'whatsapp_opt_in_at',
         'groupe_sanguin',
+        'laboratoire_id',
         'user_id',
     ];
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function laboratoire(): BelongsTo
+    {
+        return $this->belongsTo(Laboratoire::class);
     }
 
     public function commandes(): HasMany
