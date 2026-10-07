@@ -46,7 +46,7 @@ class ResultatValideNotification extends Notification implements ShouldQueue
         }
 
         if ($this->resultat->remarques) {
-            $mail->line('**Remarques du praticien :** ' . $this->resultat->remarques);
+            $mail->line('**Remarques du médecin :** ' . $this->resultat->remarques);
         }
 
         return $mail

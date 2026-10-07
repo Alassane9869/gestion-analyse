@@ -71,7 +71,7 @@ class LoginRequest extends FormRequest
                     Auth::logout();
                     RateLimiter::hit($this->throttleKey());
 
-                    $roleName = $user->isMedecin() ? 'Praticien' : ($user->isPatient() ? 'Patient' : 'Administrateur');
+                    $roleName = $user->isMedecin() ? 'Médecin' : ($user->isPatient() ? 'Patient' : 'Administrateur');
                     throw ValidationException::withMessages([
                         'email' => "Ce compte est enregistré comme {$roleName}. Veuillez sélectionner l'espace correspondant.",
                     ]);

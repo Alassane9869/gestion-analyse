@@ -26,7 +26,7 @@ class RendezVousStatutNotification extends Notification implements ShouldQueue
         $rdv = $this->rendezVous;
         $patient = $rdv->patient;
         $medecin = $rdv->medecin;
-        $nomMedecin = $medecin ? 'Dr ' . trim($medecin->prenom . ' ' . $medecin->nom) : 'votre praticien';
+        $nomMedecin = $medecin ? 'Dr ' . trim($medecin->prenom . ' ' . $medecin->nom) : 'votre médecin';
 
         $statutLibelle = match ($rdv->statut) {
             'accepte' => 'Confirmé / Accepté',
@@ -40,7 +40,7 @@ class RendezVousStatutNotification extends Notification implements ShouldQueue
             ->subject('Mise à jour de votre rendez-vous : ' . $statutLibelle)
             ->greeting('Bonjour ' . ($patient?->prenom ? $patient->prenom : $notifiable->name) . ',')
             ->line('Le statut de votre rendez-vous médical a été mis à jour.')
-            ->line('**Praticien :** ' . $nomMedecin)
+            ->line('**Médecin :** ' . $nomMedecin)
             ->line('**Date et heure :** ' . $dateHeure)
             ->line('**Nouveau statut :** ' . $statutLibelle);
 

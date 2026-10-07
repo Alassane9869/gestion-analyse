@@ -1,5 +1,5 @@
 @extends('layouts.medecin')
-@section('title', 'Tableau de bord praticien')
+@section('title', 'Tableau de bord médecin')
 @section('page-heading', 'Tableau de bord médical')
 @section('content')
 <div class="space-y-6">
@@ -9,7 +9,7 @@
             <div class="space-y-1.5">
                 <div class="inline-flex items-center gap-2 rounded-full bg-blue-500/15 px-3 py-1 text-xs font-semibold text-blue-300 ring-1 ring-blue-400/25">
                     <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                    <span>Centre de Diagnostic Biologique · Session Praticien</span>
+                    <span>Centre de Diagnostic Biologique · Session Médecin</span>
                 </div>
                 <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
                     Bonjour, Dr {{ trim((auth()->user()->medecin?->prenom ?? '').' '.(auth()->user()->medecin?->nom ?? '')) ?: auth()->user()->name }}

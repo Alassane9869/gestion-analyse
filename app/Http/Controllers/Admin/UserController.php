@@ -79,7 +79,7 @@ class UserController extends Controller
             Medecin::create([
                 'user_id' => $user->id,
                 'prenom' => $parts[0] ?? $validated['name'],
-                'nom' => $parts[1] ?? 'Praticien',
+                'nom' => $parts[1] ?? 'Médecin',
                 'email' => $validated['email'],
                 'telephone' => $validated['telephone'] ?? null,
                 'specialite' => $validated['specialite'] ?? 'Biologie médicale',
@@ -140,7 +140,7 @@ class UserController extends Controller
             if ($user->medecin) {
                 $user->medecin->update([
                     'prenom' => $parts[0] ?? $validated['name'],
-                    'nom' => $parts[1] ?? ($user->medecin->nom ?: 'Praticien'),
+                    'nom' => $parts[1] ?? ($user->medecin->nom ?: 'Médecin'),
                     'email' => $validated['email'],
                     'telephone' => $validated['telephone'] ?? $user->medecin->telephone,
                     'specialite' => $validated['specialite'] ?? $user->medecin->specialite,
@@ -149,7 +149,7 @@ class UserController extends Controller
                 Medecin::create([
                     'user_id' => $user->id,
                     'prenom' => $parts[0] ?? $validated['name'],
-                    'nom' => $parts[1] ?? 'Praticien',
+                    'nom' => $parts[1] ?? 'Médecin',
                     'email' => $validated['email'],
                     'telephone' => $validated['telephone'] ?? null,
                     'specialite' => $validated['specialite'] ?? 'Biologie médicale',

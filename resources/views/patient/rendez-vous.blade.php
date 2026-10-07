@@ -7,7 +7,7 @@
     <div>
         <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Prise de rendez-vous médical</h2>
         <p class="mt-1 text-xs text-slate-500 font-medium">
-            Planifiez une consultation avec un praticien biologiste ou réservez votre créneau de prélèvement.
+            Planifiez une consultation avec un médecin biologiste ou réservez votre créneau de prélèvement.
         </p>
     </div>
 
@@ -21,14 +21,14 @@
                     </div>
                     <div>
                         <h3 class="text-base font-bold text-slate-900">Demande de créneau</h3>
-                        <p class="text-xs text-slate-500">Sélectionnez le praticien et la date souhaitée.</p>
+                        <p class="text-xs text-slate-500">Sélectionnez le médecin et la date souhaitée.</p>
                     </div>
                 </div>
 
                 <form method="POST" action="{{ route('patient.rendez-vous.store') }}" class="space-y-4">
                     @csrf
                     <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1" for="medecin_id">Praticien / Biologiste *</label>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1" for="medecin_id">Médecin / Biologiste *</label>
                         <select id="medecin_id" class="w-full rounded-xl border-slate-300 text-xs py-2.5 focus:border-blue-500 focus:ring-blue-500" name="medecin_id" required>
                             <option value="">Sélectionnez un médecin</option>
                             @foreach($medecins as $medecin)

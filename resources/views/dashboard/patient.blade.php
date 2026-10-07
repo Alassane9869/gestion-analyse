@@ -120,7 +120,7 @@
             </div>
             <div class="flex-1 min-w-0">
                 <strong class="font-bold text-slate-900 text-sm block">Prendre rendez-vous</strong>
-                <small class="text-xs text-slate-500 block truncate">Choisir un praticien et une heure</small>
+                <small class="text-xs text-slate-500 block truncate">Choisir un médecin et une heure</small>
             </div>
             <svg class="w-4 h-4 text-slate-400 group-hover:text-sky-600 group-hover:translate-x-0.5 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
         </a>

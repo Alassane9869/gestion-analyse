@@ -130,7 +130,7 @@
                             <span class="w-1.5 h-1.5 rounded-full bg-white"></span>
                         </span>
                     </div>
-                    <strong class="text-sm font-bold text-slate-900">Praticien Biologiste</strong>
+                    <strong class="text-sm font-bold text-slate-900">Médecin Biologiste</strong>
                     <span class="text-xs text-slate-500 mt-1">Saisie des résultats, validation des examens, gestion du catalogue des analyses et suivi des patients.</span>
                 </label>
 

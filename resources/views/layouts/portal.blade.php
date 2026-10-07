@@ -35,7 +35,7 @@
                 </button>
             </div>
 
-            <div class="sidebar-caption">ESPACE {{ auth()->user()->isPatient() ? 'PATIENT' : 'PRATICIEN' }}</div>
+            <div class="sidebar-caption">ESPACE {{ auth()->user()->isPatient() ? 'PATIENT' : 'MÉDECIN' }}</div>
 
             <nav class="sidebar-nav">
                 <a class="sidebar-link {{ request()->routeIs('dashboard') ? 'is-active' : '' }}" href="{{ route('dashboard') }}">
@@ -123,7 +123,7 @@
                     <span class="avatar">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span>
                     <span>
                         <strong>{{ auth()->user()->name }}</strong>
-                        <small>{{ auth()->user()->isPatient() ? 'Patient adhérent' : 'Praticien biologiste' }}</small>
+                        <small>{{ auth()->user()->isPatient() ? 'Patient adhérent' : 'Médecin biologiste' }}</small>
                     </span>
                 </div>
                 <form method="POST" action="{{ route('logout') }}">

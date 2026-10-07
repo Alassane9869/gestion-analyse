@@ -63,7 +63,7 @@
         <a href="{{ route('admin.users.index', ['role' => 'medecin']) }}" 
            class="group rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200/80 hover:shadow-md hover:ring-blue-300 transition flex flex-col justify-between">
             <div class="flex items-center justify-between">
-                <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Praticiens Biologistes</span>
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Médecins Biologistes</span>
                 <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-105 transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                 </div>

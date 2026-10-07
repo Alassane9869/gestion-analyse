@@ -139,7 +139,7 @@
                     PRESCRIPTION & TRAÇABILITÉ
                 </span>
                 <p class="font-extrabold text-base text-slate-900 leading-tight">
-                    Dr {{ $medecin ? ($medecin->prenom . ' ' . $medecin->nom) : 'Praticien Biologiste' }}
+                    Dr {{ $medecin ? ($medecin->prenom . ' ' . $medecin->nom) : 'Médecin Biologiste' }}
                 </p>
                 <div class="mt-2.5 space-y-1 text-xs text-slate-600">
                     <p><span class="text-slate-400 font-medium">Prélèvement :</span> <strong class="text-slate-900">{{ isset($datePrelevement) ? $datePrelevement->format('d/m/Y à H:i') : now()->subHour()->format('d/m/Y à H:i') }}</strong></p>
@@ -252,7 +252,7 @@
             <div>
                 <p class="font-bold text-slate-800">Garantie de Conformité ISO 15189 & Sécurité :</p>
                 <p class="mt-1 leading-relaxed text-[11px] text-slate-500">
-                    Ce compte-rendu a été validé biologiquement par un praticien habilité après contrôle interne de qualité. Les résultats sont protégés par le secret médical.
+                    Ce compte-rendu a été validé biologiquement par un médecin habilité après contrôle interne de qualité. Les résultats sont protégés par le secret médical.
                 </p>
                 <div class="mt-2 text-[10px] text-slate-500">
                     Empreinte cryptographique de sécurité :<br>

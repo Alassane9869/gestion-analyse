@@ -90,7 +90,7 @@ class PatientPortalController extends Controller
         $debutFenetre = $dateHeure->copy()->subMinutes(15);
         $finFenetre = $dateHeure->copy()->addMinutes(15);
 
-        // Vérification de conflit d'agenda chez le praticien
+        // Vérification de conflit d'agenda chez le médecin
         $conflit = RendezVous::where('medecin_id', $data['medecin_id'])
             ->whereIn('statut', ['en_attente', 'accepte'])
             ->whereBetween('date_heure', [$debutFenetre, $finFenetre])
@@ -98,7 +98,7 @@ class PatientPortalController extends Controller
 
         if ($conflit) {
             return back()->withErrors([
-                'date_heure' => 'Ce créneau horaire est déjà réservé ou indisponible auprès de ce praticien. Veuillez choisir un autre créneau.',
+                'date_heure' => 'Ce créneau horaire est déjà réservé ou indisponible auprès de ce médecin. Veuillez choisir un autre créneau.',
             ])->withInput();
         }
 

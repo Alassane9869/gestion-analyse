@@ -388,7 +388,7 @@
                 <div class="cartouche-title">Prescription & Prélèvement</div>
                 <div class="data-row" style="margin-top: 2px;">
                     <span class="data-label">Médecin Prescripteur :</span>
-                    <span class="data-value">Dr {{ $medecin ? ($medecin->prenom . ' ' . $medecin->nom) : 'Praticien Hospitalier' }}</span>
+                    <span class="data-value">Dr {{ $medecin ? ($medecin->prenom . ' ' . $medecin->nom) : 'Médecin Hospitalier' }}</span>
                 </div>
                 <div class="data-row">
                     <span class="data-label">Date prélèvement :</span>
@@ -486,7 +486,7 @@
         <tr>
             <td class="validation-left">
                 <strong style="color:#103157;">GARANTIE DE CONFORMITÉ & SIGNATURE ÉLECTRONIQUE</strong><br>
-                Ce compte-rendu d'analyses a été validé biologiquement par un praticien habilité après contrôle interne de qualité (CIQ) conforme à la norme NF EN ISO 15189.<br>
+                Ce compte-rendu d'analyses a été validé biologiquement par un médecin habilité après contrôle interne de qualité (CIQ) conforme à la norme NF EN ISO 15189.<br>
                 Empreinte cryptographique de vérification :<br>
                 <span class="cert-hash">{{ $empreinteCryptographique }}</span>
             </td>

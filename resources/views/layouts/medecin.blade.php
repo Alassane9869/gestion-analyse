@@ -39,7 +39,7 @@
                 </button>
             </div>
 
-            <div class="sidebar-caption">ESPACE PRATICIEN</div>
+            <div class="sidebar-caption">ESPACE MÉDECIN</div>
 
             <nav class="sidebar-nav">
                 <a class="sidebar-link {{ request()->routeIs('medecin.espace.dashboard') ? 'is-active' : '' }}" href="{{ route('medecin.espace.dashboard') }}">
@@ -106,7 +106,7 @@
                     <span class="avatar">{{ strtoupper(substr($nomMedecin, 0, 1)) }}</span>
                     <span>
                         <strong>Dr {{ $nomMedecin }}</strong>
-                        <small>Praticien biologiste</small>
+                        <small>Médecin biologiste</small>
                     </span>
                 </div>
                 <form method="POST" action="{{ route('logout') }}">
