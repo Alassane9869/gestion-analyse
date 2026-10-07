@@ -11,7 +11,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-#[Fillable(['name', 'email', 'password', 'role'])]
+#[Fillable(['name', 'email', 'password', 'role', 'otp_code', 'otp_expires_at'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -43,6 +43,11 @@ class User extends Authenticatable
         return $this->hasOne(Medecin::class);
     }
 
+    public function hasPendingOtp(): bool
+    {
+        return !empty($this->otp_code);
+    }
+
     /**
      * Get the attributes that should be cast.
      *
@@ -52,6 +57,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'otp_expires_at' => 'datetime',
             'password' => 'hashed',
         ];
     }

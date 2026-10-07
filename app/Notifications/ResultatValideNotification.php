@@ -52,7 +52,7 @@ class ResultatValideNotification extends Notification implements ShouldQueue
         return $mail
             ->action('Consulter mon bulletin médical', $bulletinUrl)
             ->line('Vous pouvez télécharger et imprimer votre bulletin d’analyse officiel directement depuis votre espace personnel.')
-            ->salutation('Cordialement, Le laboratoire d’analyses médicales');
+            ->salutation("Cordialement,\nL'équipe médicale BioSanté Analyses");
     }
 
     public function toWhatsApp(object $notifiable): array

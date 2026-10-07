@@ -52,7 +52,7 @@ class RendezVousStatutNotification extends Notification implements ShouldQueue
 
         return $mail
             ->action('Accéder à mes rendez-vous', route('patient.rendez-vous'))
-            ->salutation('Cordialement, Le cabinet médical');
+            ->salutation("Cordialement,\nLe secrétariat médical BioSanté Analyses");
     }
 
     public function toArray(object $notifiable): array
