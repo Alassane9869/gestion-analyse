@@ -107,8 +107,9 @@ table tbody tr:hover { background: #f7fbff; }
 .auth-visual h1 { margin: 0; font-size: clamp(34px, 4vw, 55px); line-height: 1.08; }
 .auth-visual h1 strong { color: #a4f4e5; }
 .auth-visual__copy p { max-width: 350px; margin: 22px 0; color: #d9edf8; font-size: 14px; line-height: 1.8; }
-.trust-line { display: flex; align-items: center; gap: 9px; color: #e0fbf5; font-size: 12px; font-weight: 600; }
-.trust-line span { display: grid; place-items: center; width: 20px; height: 20px; color: #0b7583; background: #a4f4e5; border-radius: 50%; }
+.trust-line { display: flex; align-items: center; gap: 10px; margin-top: 24px; color: #ffffff; font-size: 13px; font-weight: 500; }
+.trust-line .trust-line__icon, .trust-line > span:first-child { display: grid; place-items: center; width: 22px; height: 22px; min-width: 22px; color: #065f46; background: #6ee7b7; border-radius: 50%; flex-shrink: 0; box-shadow: 0 0 10px rgba(110, 231, 183, 0.35); }
+.trust-line .trust-line__text, .trust-line > span:last-child { display: inline-block; width: auto; height: auto; color: #ecfeff; font-size: 12.5px; font-weight: 500; background: transparent; border-radius: 0; line-height: 1.4; text-shadow: 0 1px 3px rgba(0, 20, 50, 0.7); white-space: normal; }
 .medical-orbit { position: absolute; right: 15%; bottom: 16%; display: grid; place-items: center; width: 170px; height: 170px; color: #b8f6eb; border: 1px solid rgba(164,244,229,.3); border-radius: 50%; font-size: 42px; opacity: .7; }
 .medical-orbit span:nth-child(2) { position: absolute; right: -12px; top: 30px; font-size: 22px; }
 .medical-orbit span:nth-child(3) { position: absolute; left: 15px; bottom: 20px; font-size: 25px; }

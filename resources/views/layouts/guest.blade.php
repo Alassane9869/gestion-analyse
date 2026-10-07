@@ -26,10 +26,10 @@
                     <h1>Vos analyses,<br><strong>en toute confiance.</strong></h1>
                     <p>Plateforme clinique sécurisée pour la gestion de vos examens, le suivi des prélèvements et la délivrance de bulletins certifiés.</p>
                     <div class="trust-line">
-                        <span>
+                        <span class="trust-line__icon">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
                         </span>
-                        <span>Données de santé protégées · Secret médical garanti</span>
+                        <span class="trust-line__text">Données de santé protégées · Secret médical garanti</span>
                     </div>
                 </div>
             </section>
